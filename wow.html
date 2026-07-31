@@ -18,6 +18,9 @@
     --fill: rgba(120,120,128,0.12);
     --fill2: rgba(120,120,128,0.2);
     --shadow: 0 8px 30px rgba(0,0,0,0.08);
+    --glass-bg: rgba(255,255,255,0.72);
+    --glass-border: rgba(255,255,255,0.6);
+    --glass-blur: blur(28px) saturate(180%);
   }
 
   [data-theme="dark"] {
@@ -29,6 +32,8 @@
     --fill: rgba(120,120,128,0.24);
     --fill2: rgba(120,120,128,0.36);
     --shadow: 0 8px 30px rgba(0,0,0,0.4);
+    --glass-bg: rgba(30,30,30,0.78);
+    --glass-border: rgba(255,255,255,0.14);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -38,14 +43,16 @@
     background: var(--bg);
     color: var(--text);
     min-height: 100vh;
-    padding: 20px 16px 80px;
+    padding: 20px 16px 48px;
     transition: background 0.3s, color 0.3s;
     -webkit-font-smoothing: antialiased;
   }
 
+  svg { display: block; }
+
   .header {
     text-align: center;
-    margin-bottom: 32px;
+    margin-bottom: 4px;
     padding-top: 12px;
   }
   .header h1 {
@@ -59,6 +66,21 @@
     margin-top: 6px;
   }
 
+  .credit-line {
+    text-align: center;
+    font-size: 13px;
+    color: var(--text2);
+    margin-bottom: 28px;
+  }
+  .credit-line a {
+    color: var(--blue);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .credit-line a:active {
+    opacity: 0.6;
+  }
+
   .theme-toggle {
     position: fixed;
     top: 16px;
@@ -68,14 +90,17 @@
     width: 44px;
     height: 44px;
     border-radius: 22px;
-    font-size: 20px;
     cursor: pointer;
     box-shadow: var(--shadow);
     z-index: 100;
     display: flex;
     align-items: center;
     justify-content: center;
+    color: var(--text);
   }
+  .theme-toggle .icon-sun { display: none; color: var(--orange); }
+  [data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+  [data-theme="dark"] .theme-toggle .icon-sun { display: block; }
 
   .section {
     max-width: 420px;
@@ -95,6 +120,103 @@
     border-radius: 16px;
     overflow: hidden;
     box-shadow: var(--shadow);
+  }
+
+  /* ===== Frosted / Liquid Glass surfaces ===== */
+  .glass-showcase {
+    position: relative;
+    border-radius: 24px;
+    overflow: hidden;
+    padding: 28px 16px 32px;
+    background:
+      radial-gradient(circle at 12% 10%, rgba(255,255,255,0.22), transparent 40%),
+      linear-gradient(160deg, #1c1c3a 0%, #38316b 35%, #7a3f8f 68%, #c2528a 100%);
+  }
+
+  .glass-panel {
+    background: var(--glass-bg);
+    -webkit-backdrop-filter: var(--glass-blur);
+    backdrop-filter: var(--glass-blur);
+    border: 0.5px solid var(--glass-border);
+    border-radius: 22px;
+    box-shadow:
+      0 12px 40px rgba(0,0,0,0.18),
+      0 2px 8px rgba(0,0,0,0.08),
+      inset 0 0.5px 0 rgba(255,255,255,0.5);
+    padding: 18px;
+    margin-bottom: 14px;
+    position: relative;
+  }
+  .glass-panel:last-child { margin-bottom: 0; }
+  .glass-panel::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 40%;
+    background: radial-gradient(ellipse at top left, rgba(255,255,255,0.35), transparent 70%);
+    border-radius: 22px 22px 0 0;
+    pointer-events: none;
+    mix-blend-mode: soft-light;
+  }
+
+  .glass-panel-title {
+    font-size: 17px;
+    font-weight: 600;
+    margin-bottom: 2px;
+    position: relative;
+  }
+  .glass-panel-sub {
+    font-size: 13px;
+    color: var(--text2);
+    position: relative;
+  }
+
+  .glass-row {
+    display: flex;
+    gap: 12px;
+  }
+  .glass-chip {
+    flex: 1;
+    background: var(--glass-bg);
+    -webkit-backdrop-filter: blur(20px) saturate(170%);
+    backdrop-filter: blur(20px) saturate(170%);
+    border: 0.5px solid var(--glass-border);
+    border-radius: 18px;
+    box-shadow:
+      0 8px 24px rgba(0,0,0,0.16),
+      inset 0 0.5px 0 rgba(255,255,255,0.5);
+    padding: 14px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .glass-chip-icon { display: flex; align-items: center; justify-content: center; margin-bottom: 6px; }
+  .glass-chip-label { font-size: 12px; font-weight: 600; }
+
+  .glass-dock {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    background: var(--glass-bg);
+    -webkit-backdrop-filter: var(--glass-blur);
+    backdrop-filter: var(--glass-blur);
+    border: 0.5px solid var(--glass-border);
+    border-radius: 26px;
+    box-shadow:
+      0 12px 40px rgba(0,0,0,0.18),
+      inset 0 0.5px 0 rgba(255,255,255,0.5);
+    padding: 14px 20px;
+    margin-top: 14px;
+  }
+  .glass-dock-item {
+    width: 46px;
+    height: 46px;
+    border-radius: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.18);
   }
 
   /* Navigation Bar */
@@ -145,7 +267,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 16px;
     color: white;
     flex-shrink: 0;
   }
@@ -300,35 +421,6 @@
   .alert-btn + .alert-btn { border-left: 0.5px solid var(--separator); }
   .alert-btn.destructive { color: var(--red); font-weight: 600; }
 
-  /* Tab Bar */
-  .tab-bar {
-    position: fixed;
-    bottom: 0; left: 0; right: 0;
-    background: rgba(255,255,255,0.85);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-top: 0.5px solid var(--separator);
-    display: flex;
-    justify-content: space-around;
-    padding: 8px 0 28px;
-    z-index: 50;
-  }
-  [data-theme="dark"] .tab-bar {
-    background: rgba(28,28,30,0.85);
-  }
-  .tab {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 3px;
-    color: var(--text2);
-    font-size: 10px;
-    cursor: pointer;
-    min-width: 64px;
-  }
-  .tab.active { color: var(--blue); }
-  .tab-icon { font-size: 22px; }
-
   /* Badge */
   .badge {
     background: var(--red);
@@ -376,11 +468,63 @@
 </head>
 <body>
 
-<button class="theme-toggle" onclick="toggleTheme()" title="Toggle Dark Mode">🌓</button>
+<button class="theme-toggle" onclick="toggleTheme()" title="Toggle appearance" aria-label="Toggle appearance">
+  <svg class="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3a9 9 0 1 0 8.94 10.05A7 7 0 0 1 12 3z"/></svg>
+  <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.3"/><path d="M12 2.5v2.2M12 19.3v2.2M4.2 4.2l1.55 1.55M18.25 18.25l1.55 1.55M2.5 12h2.2M19.3 12h2.2M4.2 19.8l1.55-1.55M18.25 5.75l1.55-1.55"/></svg>
+</button>
 
 <div class="header">
   <h1>iOS Showcase</h1>
   <p>Interactive demo of common iOS interface elements</p>
+</div>
+
+<div class="credit-line">
+  This HTML is created and hosted by <a href="https://penguinmod.com/profile?user=cl0se" target="_blank" rel="noopener noreferrer">cl0se</a>.
+</div>
+
+<!-- Frosted / Liquid Glass Showcase -->
+<div class="section">
+  <div class="section-title">Frosted &amp; Liquid Glass</div>
+  <div class="glass-showcase">
+    <div class="glass-panel">
+      <div class="glass-panel-title">Control Center</div>
+      <div class="glass-panel-sub">Frosted glass over live color, blurred and saturated</div>
+    </div>
+    <div class="glass-row">
+      <div class="glass-chip">
+        <div class="glass-chip-icon" style="color:#ff9500">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 16v-2l-8-5V4.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V18l-2.5 1.5V21l4-1 4 1v-1.5L13 18v-4.5z"/></svg>
+        </div>
+        <div class="glass-chip-label">Airplane</div>
+      </div>
+      <div class="glass-chip">
+        <div class="glass-chip-icon" style="color:#007aff">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 11.5a12 12 0 0 1 16 0"/><path d="M7.3 15a7.5 7.5 0 0 1 9.4 0"/><circle cx="12" cy="18.5" r="1.1" fill="currentColor" stroke="none"/></svg>
+        </div>
+        <div class="glass-chip-label">Wi-Fi</div>
+      </div>
+      <div class="glass-chip">
+        <div class="glass-chip-icon" style="color:#ffcc00">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 2h6l1 3-1.5 2v12.5a1.5 1.5 0 0 1-1.5 1.5h-2a1.5 1.5 0 0 1-1.5-1.5V7L8 5z"/><line x1="8.3" y1="7.2" x2="15.7" y2="7.2"/></svg>
+        </div>
+        <div class="glass-chip-label">Torch</div>
+      </div>
+    </div>
+    <div class="glass-dock">
+      <div class="glass-dock-item" style="background:#007aff">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3C6.9 3 2.7 6.4 2.7 10.6c0 2.4 1.3 4.5 3.4 5.9-.1 1-.5 2.2-1.3 3.2 1.4 0 2.9-.5 4.1-1.3 1 .3 2.1.5 3.1.5 5.1 0 9.3-3.4 9.3-7.6S17.1 3 12 3z"/></svg>
+      </div>
+      <div class="glass-dock-item" style="background:#34c759">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8c1.4 2.7 3.6 4.9 6.3 6.3l2.1-2.1a1 1 0 0 1 1-.2c1.1.4 2.3.6 3.5.6a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C9.4 21 3 14.6 3 6.6a1 1 0 0 1 1-1h3.6a1 1 0 0 1 1 1c0 1.2.2 2.4.6 3.5a1 1 0 0 1-.2 1l-2.1 2.1z"/></svg>
+      </div>
+      <div class="glass-dock-item" style="background:#ff9500">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+      </div>
+      <div class="glass-dock-item" style="background:#ff3b30">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7.5h3.2L8.8 5h6.4l1.6 2.5H20a1 1 0 0 1 1 1V18a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8.5a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.6"/></svg>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Navigation + Large Title -->
@@ -401,7 +545,7 @@
   <div class="section-title">Search</div>
   <div class="card">
     <div class="search-bar">
-      <span>🔍</span>
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       <input type="text" placeholder="Search">
     </div>
   </div>
@@ -425,24 +569,32 @@
   <div class="section-title">List</div>
   <div class="card">
     <div class="list-item">
-      <div class="list-icon" style="background:#007aff">✈️</div>
+      <div class="list-icon" style="background:#ff9500">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 16v-2l-8-5V4.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V18l-2.5 1.5V21l4-1 4 1v-1.5L13 18v-4.5z"/></svg>
+      </div>
       <div class="list-text">Airplane Mode</div>
       <button class="toggle" onclick="this.classList.toggle('on')"></button>
     </div>
     <div class="list-item">
-      <div class="list-icon" style="background:#34c759">📶</div>
+      <div class="list-icon" style="background:#007aff">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 11.5a12 12 0 0 1 16 0"/><path d="M7.3 15a7.5 7.5 0 0 1 9.4 0"/><circle cx="12" cy="18.5" r="1.1" fill="currentColor" stroke="none"/></svg>
+      </div>
       <div class="list-text">Wi-Fi</div>
       <span style="color:var(--text2);font-size:15px;margin-right:6px">Home</span>
       <span class="list-chevron">›</span>
     </div>
     <div class="list-item">
-      <div class="list-icon" style="background:#007aff">Bluetooth</div>
+      <div class="list-icon" style="background:#007aff">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7l10 10-5 5V2l5 5L7 17"/></svg>
+      </div>
       <div class="list-text">Bluetooth</div>
       <span style="color:var(--text2);font-size:15px;margin-right:6px">On</span>
       <span class="list-chevron">›</span>
     </div>
     <div class="list-item">
-      <div class="list-icon" style="background:#ff3b30">🔔</div>
+      <div class="list-icon" style="background:#ff3b30">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5a5.5 5.5 0 0 0-5.5 5.5v3.1c0 .5-.2 1-.5 1.4l-1.6 1.9a1 1 0 0 0 .8 1.6h13.6a1 1 0 0 0 .8-1.6l-1.6-1.9c-.3-.4-.5-.9-.5-1.4V8A5.5 5.5 0 0 0 12 2.5zM9.5 18.5a2.5 2.5 0 0 0 5 0h-5z"/></svg>
+      </div>
       <div class="list-text">Notifications</div>
       <span class="badge">3</span>
       <span class="list-chevron">›</span>
@@ -521,30 +673,6 @@
 <footer>
   iOS Interface Showcase · For demonstration only
 </footer>
-
-<!-- Tab Bar -->
-<div class="tab-bar">
-  <div class="tab active">
-    <div class="tab-icon">🏠</div>
-    <div>Home</div>
-  </div>
-  <div class="tab">
-    <div class="tab-icon">🔍</div>
-    <div>Search</div>
-  </div>
-  <div class="tab">
-    <div class="tab-icon">＋</div>
-    <div>New</div>
-  </div>
-  <div class="tab">
-    <div class="tab-icon">💬</div>
-    <div>Chat</div>
-  </div>
-  <div class="tab">
-    <div class="tab-icon">👤</div>
-    <div>Profile</div>
-  </div>
-</div>
 
 <script>
   function toggleTheme() {
