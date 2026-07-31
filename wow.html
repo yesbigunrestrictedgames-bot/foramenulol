@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>iOS Interface Showcase</title>
+<style>
+  :root {
+    --bg: #f2f2f7;
+    --card: #ffffff;
+    --text: #000000;
+    --text2: #8e8e93;
+    --blue: #007aff;
+    --green: #34c759;
+    --red: #ff3b30;
+    --orange: #ff9500;
+    --separator: rgba(60,60,67,0.12);
+    --fill: rgba(120,120,128,0.12);
+    --fill2: rgba(120,120,128,0.2);
+    --shadow: 0 8px 30px rgba(0,0,0,0.08);
+  }
+
+  [data-theme="dark"] {
+    --bg: #000000;
+    --card: #1c1c1e;
+    --text: #ffffff;
+    --text2: #8e8e93;
+    --separator: rgba(84,84,88,0.65);
+    --fill: rgba(120,120,128,0.24);
+    --fill2: rgba(120,120,128,0.36);
+    --shadow: 0 8px 30px rgba(0,0,0,0.4);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 20px 16px 80px;
+    transition: background 0.3s, color 0.3s;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 32px;
+    padding-top: 12px;
+  }
+  .header h1 {
+    font-size: 34px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+  .header p {
+    color: var(--text2);
+    font-size: 15px;
+    margin-top: 6px;
+  }
+
+  .theme-toggle {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    background: var(--card);
+    border: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 22px;
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .section {
+    max-width: 420px;
+    margin: 0 auto 28px;
+  }
+  .section-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text2);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0 0 10px 16px;
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+
+  /* Navigation Bar */
+  .nav-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-bottom: 0.5px solid var(--separator);
+  }
+  .nav-title {
+    font-size: 17px;
+    font-weight: 600;
+  }
+  .nav-btn {
+    color: var(--blue);
+    font-size: 17px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  /* Large Title */
+  .large-title {
+    font-size: 34px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    padding: 8px 16px 16px;
+  }
+
+  /* List */
+  .list-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 0.5px solid var(--separator);
+    gap: 14px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .list-item:last-child { border-bottom: none; }
+  .list-item:active { background: var(--fill); }
+  .list-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: white;
+    flex-shrink: 0;
+  }
+  .list-text { flex: 1; font-size: 17px; }
+  .list-chevron { color: var(--text2); font-size: 14px; }
+
+  /* Segmented Control */
+  .segmented {
+    display: flex;
+    background: var(--fill);
+    border-radius: 9px;
+    padding: 2px;
+    margin: 16px;
+  }
+  .segment {
+    flex: 1;
+    text-align: center;
+    padding: 7px 0;
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: all 0.25s;
+    color: var(--text);
+  }
+  .segment.active {
+    background: var(--card);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+    font-weight: 600;
+  }
+
+  /* Toggle */
+  .toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    border-bottom: 0.5px solid var(--separator);
+  }
+  .toggle-row:last-child { border-bottom: none; }
+  .toggle {
+    width: 51px;
+    height: 31px;
+    background: var(--fill2);
+    border-radius: 16px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.25s;
+    border: none;
+  }
+  .toggle.on { background: var(--green); }
+  .toggle::after {
+    content: '';
+    position: absolute;
+    top: 2px; left: 2px;
+    width: 27px; height: 27px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: transform 0.28s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  .toggle.on::after { transform: translateX(20px); }
+
+  /* Slider */
+  .slider-wrap { padding: 20px 16px; }
+  .slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 4px;
+    background: var(--fill2);
+    border-radius: 2px;
+    outline: none;
+  }
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 28px;
+    height: 28px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    cursor: pointer;
+  }
+
+  /* Buttons */
+  .btn-group { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+  .btn {
+    border: none;
+    border-radius: 14px;
+    padding: 16px;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: opacity 0.15s, transform 0.1s;
+  }
+  .btn:active { opacity: 0.7; transform: scale(0.98); }
+  .btn-primary { background: var(--blue); color: white; }
+  .btn-secondary { background: var(--fill); color: var(--blue); }
+  .btn-destructive { background: var(--red); color: white; }
+  .btn-plain { background: transparent; color: var(--blue); }
+
+  /* Progress */
+  .progress-wrap { padding: 20px 16px; }
+  .progress-bar {
+    height: 4px;
+    background: var(--fill2);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--blue);
+    width: 65%;
+    border-radius: 2px;
+    transition: width 0.4s;
+  }
+
+  /* Activity Indicator */
+  .spinner {
+    width: 24px;
+    height: 24px;
+    border: 3px solid var(--fill2);
+    border-top-color: var(--text2);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 20px auto;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Alert / Sheet preview */
+  .alert-preview {
+    margin: 16px;
+    background: var(--card);
+    border-radius: 14px;
+    text-align: center;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .alert-title { font-size: 17px; font-weight: 600; padding: 20px 16px 4px; }
+  .alert-msg { font-size: 13px; color: var(--text2); padding: 0 16px 20px; }
+  .alert-actions { display: flex; border-top: 0.5px solid var(--separator); }
+  .alert-btn {
+    flex: 1;
+    padding: 14px;
+    background: none;
+    border: none;
+    font-size: 17px;
+    color: var(--blue);
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .alert-btn + .alert-btn { border-left: 0.5px solid var(--separator); }
+  .alert-btn.destructive { color: var(--red); font-weight: 600; }
+
+  /* Tab Bar */
+  .tab-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 0.5px solid var(--separator);
+    display: flex;
+    justify-content: space-around;
+    padding: 8px 0 28px;
+    z-index: 50;
+  }
+  [data-theme="dark"] .tab-bar {
+    background: rgba(28,28,30,0.85);
+  }
+  .tab {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    color: var(--text2);
+    font-size: 10px;
+    cursor: pointer;
+    min-width: 64px;
+  }
+  .tab.active { color: var(--blue); }
+  .tab-icon { font-size: 22px; }
+
+  /* Badge */
+  .badge {
+    background: var(--red);
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 9px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 5px;
+  }
+
+  /* Search */
+  .search-bar {
+    margin: 12px 16px;
+    background: var(--fill);
+    border-radius: 10px;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text2);
+    font-size: 17px;
+  }
+  .search-bar input {
+    border: none;
+    background: transparent;
+    outline: none;
+    flex: 1;
+    font-size: 17px;
+    color: var(--text);
+    font-family: inherit;
+  }
+
+  footer {
+    text-align: center;
+    color: var(--text2);
+    font-size: 12px;
+    margin-top: 40px;
+  }
+</style>
+</head>
+<body>
+
+<button class="theme-toggle" onclick="toggleTheme()" title="Toggle Dark Mode">🌓</button>
+
+<div class="header">
+  <h1>iOS Showcase</h1>
+  <p>Interactive demo of common iOS interface elements</p>
+</div>
+
+<!-- Navigation + Large Title -->
+<div class="section">
+  <div class="section-title">Navigation</div>
+  <div class="card">
+    <div class="nav-bar">
+      <button class="nav-btn">Cancel</button>
+      <div class="nav-title">Settings</div>
+      <button class="nav-btn" style="font-weight:600">Done</button>
+    </div>
+    <div class="large-title">Settings</div>
+  </div>
+</div>
+
+<!-- Search -->
+<div class="section">
+  <div class="section-title">Search</div>
+  <div class="card">
+    <div class="search-bar">
+      <span>🔍</span>
+      <input type="text" placeholder="Search">
+    </div>
+  </div>
+</div>
+
+<!-- Segmented Control -->
+<div class="section">
+  <div class="section-title">Segmented Control</div>
+  <div class="card">
+    <div class="segmented" id="segments">
+      <div class="segment active" onclick="setSegment(this)">Day</div>
+      <div class="segment" onclick="setSegment(this)">Week</div>
+      <div class="segment" onclick="setSegment(this)">Month</div>
+      <div class="segment" onclick="setSegment(this)">Year</div>
+    </div>
+  </div>
+</div>
+
+<!-- List / Table View -->
+<div class="section">
+  <div class="section-title">List</div>
+  <div class="card">
+    <div class="list-item">
+      <div class="list-icon" style="background:#007aff">✈️</div>
+      <div class="list-text">Airplane Mode</div>
+      <button class="toggle" onclick="this.classList.toggle('on')"></button>
+    </div>
+    <div class="list-item">
+      <div class="list-icon" style="background:#34c759">📶</div>
+      <div class="list-text">Wi-Fi</div>
+      <span style="color:var(--text2);font-size:15px;margin-right:6px">Home</span>
+      <span class="list-chevron">›</span>
+    </div>
+    <div class="list-item">
+      <div class="list-icon" style="background:#007aff">Bluetooth</div>
+      <div class="list-text">Bluetooth</div>
+      <span style="color:var(--text2);font-size:15px;margin-right:6px">On</span>
+      <span class="list-chevron">›</span>
+    </div>
+    <div class="list-item">
+      <div class="list-icon" style="background:#ff3b30">🔔</div>
+      <div class="list-text">Notifications</div>
+      <span class="badge">3</span>
+      <span class="list-chevron">›</span>
+    </div>
+  </div>
+</div>
+
+<!-- Toggles -->
+<div class="section">
+  <div class="section-title">Switches</div>
+  <div class="card">
+    <div class="toggle-row">
+      <span>Wi-Fi</span>
+      <button class="toggle on" onclick="this.classList.toggle('on')"></button>
+    </div>
+    <div class="toggle-row">
+      <span>Bluetooth</span>
+      <button class="toggle" onclick="this.classList.toggle('on')"></button>
+    </div>
+    <div class="toggle-row">
+      <span>Cellular Data</span>
+      <button class="toggle on" onclick="this.classList.toggle('on')"></button>
+    </div>
+  </div>
+</div>
+
+<!-- Slider -->
+<div class="section">
+  <div class="section-title">Slider</div>
+  <div class="card">
+    <div class="slider-wrap">
+      <input type="range" class="slider" min="0" max="100" value="65">
+    </div>
+  </div>
+</div>
+
+<!-- Buttons -->
+<div class="section">
+  <div class="section-title">Buttons</div>
+  <div class="card">
+    <div class="btn-group">
+      <button class="btn btn-primary">Continue</button>
+      <button class="btn btn-secondary">Secondary</button>
+      <button class="btn btn-destructive">Delete</button>
+      <button class="btn btn-plain">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Progress -->
+<div class="section">
+  <div class="section-title">Progress</div>
+  <div class="card">
+    <div class="progress-wrap">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress"></div>
+      </div>
+    </div>
+    <div class="spinner"></div>
+  </div>
+</div>
+
+<!-- Alert -->
+<div class="section">
+  <div class="section-title">Alert</div>
+  <div class="alert-preview">
+    <div class="alert-title">Delete Message?</div>
+    <div class="alert-msg">This action cannot be undone.</div>
+    <div class="alert-actions">
+      <button class="alert-btn">Cancel</button>
+      <button class="alert-btn destructive">Delete</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  iOS Interface Showcase · For demonstration only
+</footer>
+
+<!-- Tab Bar -->
+<div class="tab-bar">
+  <div class="tab active">
+    <div class="tab-icon">🏠</div>
+    <div>Home</div>
+  </div>
+  <div class="tab">
+    <div class="tab-icon">🔍</div>
+    <div>Search</div>
+  </div>
+  <div class="tab">
+    <div class="tab-icon">＋</div>
+    <div>New</div>
+  </div>
+  <div class="tab">
+    <div class="tab-icon">💬</div>
+    <div>Chat</div>
+  </div>
+  <div class="tab">
+    <div class="tab-icon">👤</div>
+    <div>Profile</div>
+  </div>
+</div>
+
+<script>
+  function toggleTheme() {
+    const html = document.documentElement;
+    const current = html.getAttribute('data-theme');
+    html.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+  }
+
+  function setSegment(el) {
+    el.parentElement.querySelectorAll('.segment').forEach(s => s.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  // Demo progress animation
+  let p = 65;
+  setInterval(() => {
+    p = p >= 100 ? 10 : p + 1;
+    document.getElementById('progress').style.width = p + '%';
+  }, 80);
+</script>
+</body>
+</html>
